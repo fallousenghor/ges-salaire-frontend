@@ -1,8 +1,8 @@
 import type { StatCardProps } from "../types/propsType";
 import { colorClasses } from "../ui/color";
+import { LoadingSpinner } from "./LoadingSpinner";
 
-export const StatCard = ({ title, value, subtitle, icon, color = 'green' }: StatCardProps) => {
-
+export const StatCard = ({ title, value, subtitle, icon, color = 'green', isLoading }: StatCardProps) => {
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
       <div className="flex items-center justify-between mb-4">
@@ -12,9 +12,15 @@ export const StatCard = ({ title, value, subtitle, icon, color = 'green' }: Stat
         </div>
       </div>
       <div className="mb-2">
-        <span className="text-3xl font-bold text-gray-900">{value}</span>
+        {isLoading ? (
+          <div className="h-9 flex items-center">
+            <LoadingSpinner size="sm" />
+          </div>
+        ) : (
+          <span className="text-3xl font-bold text-gray-900">{value}</span>
+        )}
       </div>
-      <p className="text-sm text-gray-500">{subtitle}</p>
+      <p className="text-sm text-gray-500">{isLoading ? "Chargement..." : subtitle}</p>
     </div>
   );
 };

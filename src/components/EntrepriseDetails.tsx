@@ -1,7 +1,7 @@
 import React from "react";
 import type { Entreprise } from "../types/entreprise";
 import { getLogoUrl } from '../utils/uploads';
-import { Building2, Mail, Phone, MapPin, DollarSign, CalendarCheck, BadgeCheck } from "lucide-react";
+import { Building2, Mail, Phone, MapPin, DollarSign, CalendarCheck, BadgeCheck, Palette } from "lucide-react";
 
 interface EntrepriseDetailsProps {
   entreprise: Entreprise;
@@ -60,6 +60,22 @@ const EntrepriseDetails: React.FC<EntrepriseDetailsProps> = ({ entreprise, onClo
             <div className="flex items-center gap-3 text-gray-700 bg-white/70 rounded-lg p-3 shadow-sm">
               <CalendarCheck className="w-5 h-5 text-green-400" />
               <span className="font-semibold">Créée le:</span> {entreprise.createdAt ? new Date(entreprise.createdAt).toLocaleDateString() : '-'}
+            </div>
+            <div className="flex items-center gap-3 text-gray-700 bg-white/70 rounded-lg p-3 shadow-sm">
+              <Palette className="w-5 h-5 text-green-400" />
+              <span className="font-semibold">Couleurs:</span>
+              <div className="flex gap-2">
+                <div
+                  className="w-6 h-6 rounded border border-gray-300"
+                  style={{ backgroundColor: entreprise.couleurPrimaire }}
+                  title="Couleur primaire"
+                />
+                <div
+                  className="w-6 h-6 rounded border border-gray-300"
+                  style={{ backgroundColor: entreprise.couleurSecondaire }}
+                  title="Couleur secondaire"
+                />
+              </div>
             </div>
           </div>
         </div>

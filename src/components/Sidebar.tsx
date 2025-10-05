@@ -37,10 +37,10 @@ export const Sidebar = ({ activeItem, setActiveItem }: SidebarProps) => {
   <div className="w-64 border-r border-gray-200 h-full flex flex-col" >
       <div className="p-6 border-b border-gray-200">
         <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" >
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-theme-primary text-white" >
             <span className="font-bold text-sm">GES</span>
           </div>
-          <span className="font-semibold text-lg">SALAIRE</span>
+          <span className="font-semibold text-lg text-theme-secondary">SALAIRE</span>
         </div>
       </div>
 
@@ -59,8 +59,8 @@ export const Sidebar = ({ activeItem, setActiveItem }: SidebarProps) => {
                 }}
                 className={`w-full flex items-center cursor-pointer space-x-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                   activeItem === item.id
-                    ? 'bg-green-50 text-green-700 border-r-2 border-green-600'
-                    : 'text-gray-600 hover:bg-gray-50'
+                    ? 'bg-theme-primary/10 text-theme-primary border-r-2 border-theme-primary'
+                    : 'text-gray-600 hover:bg-theme-primary/5'
                 }`}
               >
                 <item.icon className="w-5 h-5" />
@@ -123,14 +123,14 @@ export const SuperAdminSidebar = ({ isOpen, onClose }: SuperAdminSidebarProps) =
         <div>
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-green-600 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">GES</span>
               </div>
-              <span className="font-semibold text-lg">SALAIRE</span>
+              <span className="font-semibold text-lg text-gray-800">SALAIRE</span>
             </div>
             <button 
               onClick={onClose}
-              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-all"
+              className="lg:hidden p-2 hover:bg-blue-50 rounded-lg transition-all text-blue-600"
             >
               <X size={20} />
             </button>
@@ -145,8 +145,8 @@ export const SuperAdminSidebar = ({ isOpen, onClose }: SuperAdminSidebarProps) =
                     onClick={() => setActiveItem(item.id)}
                     className={`w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer
                       ${activeItem === item.id
-                        ? item.color + ' text-green-700 shadow border-l-4 border-green-500'
-                        : 'text-gray-700 hover:bg-green-50'}
+                        ? 'bg-blue-100 text-blue-600 shadow border-l-4 border-blue-600'
+                        : 'text-gray-700 hover:bg-blue-50'}
                     `}
                   >
                     <Icon size={20} />
@@ -162,7 +162,7 @@ export const SuperAdminSidebar = ({ isOpen, onClose }: SuperAdminSidebarProps) =
             logout();
             window.location.href = '/login';
           }}
-          className="flex items-center justify-center gap-2 bg-gray-600 hover:bg-red-300 text-white py-3 px-6 rounded-lg w-full transition-all duration-300 shadow hover:scale-105 group mt-6 cursor-pointer"
+          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 rounded-lg w-full transition-all duration-300 shadow hover:scale-105 group mt-6 cursor-pointer"
         >
           <LogOut size={20} className="group-hover:rotate-12 transition-transform" />
           <span className="font-semibold">Déconnexion</span>

@@ -27,9 +27,9 @@ export default function PayrunListWithBulletins() {
   return (
     <div className="mb-8 max-w-3xl mx-auto">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">Cycles de paie</h2>
+        <h2 className="text-2xl font-bold text-theme-primary">Cycles de paie</h2>
         <button
-          className="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded shadow"
+          className="bg-theme-primary hover:bg-theme-primary/90 text-white font-semibold px-4 py-2 rounded-lg shadow-sm"
           onClick={() => setShowForm(true)}
         >
           Ajouter un cycle
@@ -54,14 +54,14 @@ export default function PayrunListWithBulletins() {
       )}
       <div className="overflow-x-auto rounded-lg shadow mb-6">
         <table className="min-w-full bg-white border border-gray-200">
-          <thead className="bg-gray-100 sticky top-0 z-10">
+          <thead className="bg-theme-primary/5 sticky top-0 z-10">
             <tr>
-              <th className="py-3 px-4 text-left font-semibold text-gray-700">ID</th>
-              <th className="py-3 px-4 text-left font-semibold text-gray-700">Début</th>
-              <th className="py-3 px-4 text-left font-semibold text-gray-700">Fin</th>
-              <th className="py-3 px-4 text-left font-semibold text-gray-700">Type</th>
-              <th className="py-3 px-4 text-left font-semibold text-gray-700">Statut</th>
-              <th className="py-3 px-4 text-center font-semibold text-gray-700">Action</th>
+              <th className="py-3 px-4 text-left font-semibold text-theme-secondary">ID</th>
+              <th className="py-3 px-4 text-left font-semibold text-theme-secondary">Début</th>
+              <th className="py-3 px-4 text-left font-semibold text-theme-secondary">Fin</th>
+              <th className="py-3 px-4 text-left font-semibold text-theme-secondary">Type</th>
+              <th className="py-3 px-4 text-left font-semibold text-theme-secondary">Statut</th>
+              <th className="py-3 px-4 text-center font-semibold text-theme-secondary">Action</th>
               
             </tr>
           </thead>
@@ -75,9 +75,9 @@ export default function PayrunListWithBulletins() {
                 <td className="py-2 px-4">
                   <span className={
                     p.statut === 'APPROUVE'
-                      ? 'bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-semibold'
+                      ? 'bg-theme-primary/20 text-theme-primary px-2 py-1 rounded-full text-xs font-semibold'
                       : p.statut === 'CLOTURE'
-                        ? 'bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs font-semibold'
+                        ? 'bg-theme-secondary/20 text-theme-secondary px-2 py-1 rounded-full text-xs font-semibold'
                         : 'bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-semibold'
                   }>
                     {p.statut}

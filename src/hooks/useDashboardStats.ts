@@ -1,57 +1,92 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { apiFetch } from '../api/apiFetch';
 import { on } from '../utils/eventBus';
+
+// État initial des statistiques
+const initialStats = {
+  actifs: 0,
+  masseSalariale: 0,
+  montantPaye: 0,
+  montantRestant: 0,
+};
 
 export function useDashboardStats() {
   const { user, loading: authLoading } = useAuth();
   const entrepriseId = user?.entrepriseId ? Number(user.entrepriseId) : undefined;
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [stats, setStats] = useState({
-    actifs: 0,
-    masseSalariale: 0,
-    montantPaye: 0,
-    montantRestant: 0,
-  });
+  const [stats, setStats] = useState(initialStats);
 
+  // Fonction pour réinitialiser les stats
+  const resetStats = useCallback(() => {
+    setStats(initialStats);
+    setError(null);
+    setLoading(false);
+  }, []);
+
+  // Fonction pour charger les stats
+  const fetchStats = useCallback(async () => {
+    if (!entrepriseId || !user || authLoading) {
+      resetStats();
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const currentStats = await apiFetch(`/paiement/stats/entreprise/${entrepriseId}/mois-courant`);
+      setStats(currentStats);
+    } catch (err) {
+      console.error('Erreur lors du chargement des stats:', err);
+      setError('Erreur lors du chargement des stats');
+      setStats(initialStats);
+    } finally {
+      setLoading(false);
+    }
+  }, [entrepriseId, user, authLoading, resetStats]);
+
+  // Effet pour gérer la déconnexion
   useEffect(() => {
-    let unsub: (() => void) | null = null;
-    const fetchStats = async () => {
-      if (!entrepriseId || !user || authLoading) return;
-      setLoading(true);
-      setError(null);
-      try {
-        const currentStats = await apiFetch(`/paiement/stats/entreprise/${entrepriseId}/mois-courant`);
-        setStats(currentStats);
-      } catch (err) {
-        console.error('Erreur lors du chargement des stats:', err);
-        setError('Erreur lors du chargement des stats');
-      } finally {
-        setLoading(false);
-      }
+    const handleLogout = () => {
+      resetStats();
     };
 
+    window.addEventListener('auth:logout', handleLogout);
+    return () => window.removeEventListener('auth:logout', handleLogout);
+  }, [resetStats]);
+
+  // Effet pour gérer le chargement initial et les mises à jour
+  useEffect(() => {
+    let unsub: (() => void) | null = null;
+
+    // Charger les stats initiales
     fetchStats();
-    // subscribe to paiement events to refresh
-    unsub = on('paiement:created', (payload: unknown) => {
-      // Optimistically update numbers for snappier UI
-      try {
-  const montant = typeof payload === 'object' && payload !== null && 'montant' in (payload as object) ? Number((payload as unknown as { montant?: number }).montant) : undefined;
-        if (montant && montant > 0) {
-          setStats((s) => ({ ...s, montantPaye: s.montantPaye + montant, montantRestant: Math.max(0, s.montantRestant - montant) }));
-        }
-      } catch {
-        // ignore
-      }
-      // and refetch to be safe
-      fetchStats();
-    });
+    
+    // Configurer les écouteurs d'événements pour les mises à jour
+    const events = ['paiement:created', 'paiement:updated', 'employe:created', 'employe:updated'];
+    const unsubscribers = events.map(event => 
+      on(event, () => {
+        fetchStats();
+      })
+    );
+    
+    unsub = () => {
+      unsubscribers.forEach(unsub => unsub());
+    };
 
     return () => {
       if (unsub) unsub();
     };
-  }, [entrepriseId, user, authLoading]);
+  }, [fetchStats]);
+
+  // Réinitialiser quand il n'y a pas d'utilisateur
+  useEffect(() => {
+    if (!user) {
+      resetStats();
+    }
+  }, [user, resetStats]);
 
   return { ...stats, loading, error };
 }

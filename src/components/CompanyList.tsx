@@ -136,8 +136,7 @@ const CompanyList: React.FC = () => {
             <div className="flex justify-between items-center">
               <h1 className="text-xl font-bold text-gray-800">Liste des entreprises</h1>
               <button
-                className="flex bg-green-800 items-center cursor-pointer gap-2 py-2 px-5 rounded-lg shadow transition-all duration-300 hover:scale-105"
-                style={{ color: '#fff', border: 'none' }}
+                className="flex items-center cursor-pointer gap-2 py-2 px-5 rounded-lg shadow transition-all duration-300 hover:scale-105 btn-primary"
                 onClick={() => setShowModal(true)}
               >
                 <span className="font-semibold">{messagesFr.creerEntreprise}</span>
@@ -220,32 +219,28 @@ const CompanyList: React.FC = () => {
                     <td className="px-4 py-3">
                       <div className="flex justify-center gap-2">
                         <button 
-                          className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
-                          style={{ background: '#fff', color: '#1976d2', border: '1px solid #1976d2' }}
+                          className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md bg-white text-theme-primary border border-theme-primary"
                           onClick={() => setEditEntreprise(company)}
                           title="Modifier"
                         >
                           <Edit3 className="w-4 h-4" />
                         </button>
                         <button 
-                          className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
-                          style={{ background: '#ffdddd', color: '#b00020', border: '1px solid #b00020' }}
+                          className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md bg-red-50 text-red-600 border border-red-600"
                           onClick={() => handleDelete(Number(company.id))}
                           title="Supprimer"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
                         <button 
-                          className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
-                          style={{ background: '#e0e0e0', color: '#333', border: '1px solid #aaa' }}
+                          className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md bg-gray-100 text-gray-700 border border-gray-400"
                           onClick={() => handleClose(Number(company.id))}
                           title="Fermer"
                         >
                           <Power className="w-4 h-4" />
                         </button>
                         <button
-                          className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md"
-                          style={{ background: '#e0f7fa', color: '#00796b', border: '1px solid #00796b' }}
+                          className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md bg-theme-secondary/10 text-theme-secondary border border-theme-secondary"
                           onClick={() => setSelectedEntreprise(company)}
                           title="Détails"
                         >

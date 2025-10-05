@@ -11,6 +11,8 @@ const defaultValues: Partial<EntrepriseFormData> = {
   logo: "",
   devise: "XOF",
   typePeriode: "MENSUEL",
+  couleurPrimaire: "#2563eb",
+  couleurSecondaire: "#1e40af",
 };
 
 export function useEntrepriseForm(entrepriseId?: string) {

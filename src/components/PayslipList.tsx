@@ -56,32 +56,32 @@ export default function PayslipList({ payrunId, payrunStatut }: Props) {
   return (
     <div className="overflow-x-auto bg-white rounded-2xl shadow-lg mt-4">
       <table className="min-w-full divide-y divide-gray-200">
-        <thead className="bg-green-50">
-          <tr>
-            <th className="px-4 py-3 text-left text-xs font-bold text-green-700 uppercase">Employé</th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-green-700 uppercase">Net à payer</th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-green-700 uppercase">Statut</th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-green-700 uppercase">Approbation</th>
-            <th className="px-4 py-3 text-left text-xs font-bold text-green-700 uppercase">Action</th>
+                  <thead className="bg-theme-primary/5">
+            <tr>
+              <th className="px-4 py-3 text-left text-xs font-bold text-theme-secondary uppercase">Employé</th>
+              <th className="px-4 py-3 text-left text-xs font-bold text-theme-secondary uppercase">Net à payer</th>
+              <th className="px-4 py-3 text-left text-xs font-bold text-theme-secondary uppercase">Statut</th>
+              <th className="px-4 py-3 text-left text-xs font-bold text-theme-secondary uppercase">Approbation</th>
+              <th className="px-4 py-3 text-left text-xs font-bold text-theme-secondary uppercase">Action</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100">
           {payslips.map((p) => (
-            <tr key={p.id} className="hover:bg-green-50 transition-all duration-150">
-              <td className="px-4 py-3 font-medium text-gray-800">{p.employe.nomComplet}</td>
-              <td className="px-4 py-3 font-semibold text-green-700">{p.netAPayer.toLocaleString()} FCFA</td>
+            <tr key={p.id} className="hover:bg-theme-primary/5 transition-all duration-150">
+              <td className="px-4 py-3 font-medium text-theme-secondary">{p.employe.nomComplet}</td>
+              <td className="px-4 py-3 font-semibold text-theme-primary">{p.netAPayer.toLocaleString()} FCFA</td>
               <td className="px-4 py-3">
                 {p.statut === "PAYE" ? (
-                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold rounded bg-green-100 text-green-700"><svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>Payé</span>
+                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold rounded bg-theme-primary/20 text-theme-primary"><svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>Payé</span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold rounded bg-yellow-100 text-yellow-700"><svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /></svg>En attente</span>
+                  <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-bold rounded bg-theme-secondary/20 text-theme-secondary"><svg className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /></svg>En attente</span>
                 )}
               </td>
               <td className="px-4 py-3">
                 {p.approuveAdmin ? (
-                  <span className="inline-block px-2 py-1 text-xs font-bold rounded bg-green-50 text-green-700">Approuvé</span>
+                  <span className="inline-block px-2 py-1 text-xs font-bold rounded bg-theme-primary/20 text-theme-primary">Approuvé</span>
                 ) : (
-                  <span className="inline-block px-2 py-1 text-xs font-bold rounded bg-yellow-50 text-yellow-700">En attente</span>
+                  <span className="inline-block px-2 py-1 text-xs font-bold rounded bg-theme-secondary/20 text-theme-secondary">En attente</span>
                 )}
               </td>
               <td className="px-4 py-3">
@@ -89,7 +89,7 @@ export default function PayslipList({ payrunId, payrunStatut }: Props) {
                   // Si le cycle est approuvé, autoriser le paiement des bulletins non payés
                   p.statut !== "PAYE" ? (
                     <button
-                      className="bg-gradient-to-tr from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white px-4 py-1.5 rounded-xl shadow font-bold transition-all duration-150"
+                      className="bg-theme-primary hover:bg-theme-primary/90 text-white px-4 py-1.5 rounded-xl shadow font-bold transition-all duration-150"
                       disabled={payingId === p.id}
                       onClick={() => handlePayer(p.id, p.netAPayer)}
                     >
@@ -98,10 +98,10 @@ export default function PayslipList({ payrunId, payrunStatut }: Props) {
                       ) : "Payer"}
                     </button>
                   ) : (
-                    <span className="text-green-600 font-bold">Payé</span>
+                    <span className="text-theme-primary font-bold">Payé</span>
                   )
                 ) : (
-                  <span className="text-gray-400">Cycle non approuvé</span>
+                  <span className="text-theme-secondary/40">Cycle non approuvé</span>
                 )}
               </td>
             </tr>

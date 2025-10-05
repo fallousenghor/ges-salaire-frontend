@@ -16,7 +16,13 @@ export function usePayrollEvolution() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!entrepriseId || !user || authLoading) return;
+    if (!entrepriseId || !user || authLoading) {
+      // Réinitialiser les données d'évolution si pas d'utilisateur
+      setData([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
     setLoading(true);
     setError(null);
     fetchEmployes(entrepriseId)

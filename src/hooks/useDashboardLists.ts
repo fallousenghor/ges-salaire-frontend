@@ -31,7 +31,15 @@ export function useDashboardLists() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!entrepriseId || !user || authLoading) return;
+    if (!entrepriseId || !user || authLoading) {
+      // Réinitialiser toutes les listes si pas d'utilisateur
+      setRecentPayslips([]);
+      setRecentPayments([]);
+      setUpcomingPayments([]);
+      setLoading(false);
+      setError(null);
+      return;
+    }
     let unsub: (() => void) | null = null;
     const fetchLists = async () => {
       setLoading(true);

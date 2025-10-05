@@ -128,8 +128,8 @@ export function CreateEmployeForm({ onClose, entrepriseId, onCreated }: CreateEm
         <label className="font-semibold">Actif</label>
       </div>
       <div className="flex gap-3 mt-6">
-  <button type="submit" className="font-bold py-2 px-4 rounded-lg shadow" style={{ background: '#1976d2', color: '#fff', border: 'none' }}>Créer</button>
-  <button type="button" className="font-bold py-2 px-4 rounded-lg" style={{ background: '#fff', color: '#1976d2', border: '1px solid #1976d2' }} onClick={onClose}>Annuler</button>
+  <button type="submit" className="font-bold py-2 px-4 rounded-lg shadow btn-primary">Créer</button>
+  <button type="button" className="font-bold py-2 px-4 rounded-lg border border-theme-primary text-theme-primary bg-white" onClick={onClose}>Annuler</button>
       </div>
     </form>
   );

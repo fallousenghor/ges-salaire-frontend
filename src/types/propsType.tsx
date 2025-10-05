@@ -11,6 +11,7 @@ export interface StatCardProps {
   subtitle: string;
   icon: JSX.Element;
   color?: 'green' | 'blue' | 'orange' | 'purple';
+  isLoading?: boolean;
 }
 
 export interface DashboardLayoutProps {

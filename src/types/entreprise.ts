@@ -15,6 +15,8 @@ export interface Entreprise {
   devise: string;
   typePeriode: TypePeriode;
   statut?: string;
+  couleurPrimaire: string;
+  couleurSecondaire: string;
   users?: User[];
   createdAt?: string;
   updatedAt?: string;

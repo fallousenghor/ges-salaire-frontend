@@ -25,6 +25,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
+      // Déconnexion complète avant la nouvelle connexion
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      setToken(null);
+      setUser(null);
+      
+      // Attendre que le state soit réinitialisé
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
       const data = await loginApi(email, password);
       // Extraction de entrepriseId depuis le tableau de rôles si présent
       let entrepriseId;
@@ -49,10 +58,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
  
   const logout = () => {
-    setToken(null);
+    // Indiquer que nous sommes en train de déconnecter
+    setLoading(true);
+    
+    // Publier l'événement de déconnexion avant de nettoyer le state
+    window.dispatchEvent(new CustomEvent('auth:logout'));
+    
+    // Nettoyer immédiatement le localStorage
+    localStorage.clear();  // Nettoie tout le localStorage
+    
+    // Réinitialiser le state de manière synchrone
     setUser(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    setToken(null);
+    
+    // Forcer un petit délai pour permettre aux composants de se mettre à jour
+    requestAnimationFrame(() => {
+      setLoading(false);
+    });
   };
 
   return (

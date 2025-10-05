@@ -23,5 +23,5 @@ export const generalItems = [
  
 
 export const menuItemsuperAdmin = [
-  { id: 'companies', icon: Building2, label: 'Gestion Entreprises', color: 'bg-green-100' },
+  { id: 'companies', icon: Building2, label: 'Gestion Entreprises' },
 ];

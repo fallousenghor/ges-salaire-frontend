@@ -12,7 +12,7 @@ export function PayrollEvolutionChart() {
   const { data, loading, error } = usePayrollEvolution();
   const chartRef = useRef<ChartJS<'doughnut'>>(null);
 
-  if (loading) return <div className="text-gray-400">Chargement du graphique...</div>;
+  if (loading) return <div className="text-theme-secondary/40">Chargement du graphique...</div>;
   if (error) return <div className="text-red-600">{error}</div>;
 
   const chartData = {
@@ -22,12 +22,13 @@ export function PayrollEvolutionChart() {
         label: 'Masse salariale',
         data: data.map((d: { total: number }) => d.total),
         backgroundColor: [
-          '#34d399',
-          '#6ee7b7',
-          '#059669',
-          '#a7f3d0',
-          '#10b981',
-          '#064e3b',
+          // Utiliser des variations de notre couleur primaire
+          'rgba(var(--theme-primary-rgb), 1)',
+          'rgba(var(--theme-primary-rgb), 0.8)',
+          'rgba(var(--theme-primary-rgb), 0.6)',
+          'rgba(var(--theme-primary-rgb), 0.4)',
+          'rgba(var(--theme-primary-rgb), 0.2)',
+          'rgba(var(--theme-primary-rgb), 0.1)',
         ],
         borderColor: '#fff',
         borderWidth: 2,
@@ -44,7 +45,8 @@ export function PayrollEvolutionChart() {
         display: true,
         position: 'bottom' as const,
         labels: {
-          color: '#059669',
+          // Utiliser notre couleur secondaire
+          color: 'rgba(var(--theme-secondary-rgb), 0.8)',
           font: { size: 14, weight: 'bold' as const },
         },
       },

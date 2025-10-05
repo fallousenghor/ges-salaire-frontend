@@ -37,7 +37,7 @@ const PointagePage = () => {
   return (
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-2xl font-bold text-green-700">Pointage - Présence</h2>
+        <h2 className="text-2xl font-bold text-theme-primary">Pointage - Présence</h2>
       </div>
 
       {loading && <div className="text-gray-500 animate-pulse">Chargement...</div>}
@@ -47,17 +47,17 @@ const PointagePage = () => {
         Array.isArray(filteredEmployes) && filteredEmployes.length === 0 ? (
           <div className="text-center text-gray-500 py-12">Aucun employé trouvé pour cette entreprise.</div>
         ) : (
-          <div className="overflow-x-auto rounded-xl shadow-lg border border-green-100 bg-white">
-            <table className="min-w-full divide-y divide-green-100">
-              <thead className="bg-gradient-to-r from-green-50 to-green-100">
+          <div className="overflow-x-auto rounded-xl shadow-lg border border-theme-primary/20 bg-white">
+            <table className="min-w-full divide-y divide-theme-primary/10">
+              <thead className="bg-theme-primary/5">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-green-700 uppercase">Matricule</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-green-700 uppercase">Nom complet</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-green-700 uppercase">Poste</th>
-                  <th className="px-6 py-3 text-left text-xs font-bold text-green-700 uppercase">Présent</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-theme-secondary uppercase">Matricule</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-theme-secondary uppercase">Nom complet</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-theme-secondary uppercase">Poste</th>
+                  <th className="px-6 py-3 text-left text-xs font-bold text-theme-secondary uppercase">Présent</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-green-50">
+              <tbody className="divide-y divide-theme-primary/5">
                 {filteredEmployes.map((employe, idx) => {
                   const last = pointages[employe.id];
                   const alreadyToday = (() => {
@@ -70,13 +70,13 @@ const PointagePage = () => {
                   })();
 
                   return (
-                    <tr key={employe.id} className={(idx % 2 === 0 ? 'bg-white' : 'bg-green-50') + ' hover:bg-green-100'}>
-                      <td className="px-6 py-4 font-mono text-green-700">{employe.badge?.matricule || '-'}</td>
+                    <tr key={employe.id} className={(idx % 2 === 0 ? 'bg-white' : 'bg-theme-primary/5') + ' hover:bg-theme-primary/10'}>
+                      <td className="px-6 py-4 font-mono text-theme-primary">{employe.badge?.matricule || '-'}</td>
                       <td className="px-6 py-4 font-semibold text-gray-900">{employe.nomComplet}</td>
                       <td className="px-6 py-4 text-gray-700">{employe.poste || '-'}</td>
                       <td className="px-6 py-4">
                         <button
-                          className={`px-3 py-1 rounded font-bold text-white ${alreadyToday ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+                          className={`px-3 py-1 rounded font-bold text-white ${alreadyToday ? 'bg-gray-400 cursor-not-allowed' : 'bg-theme-primary hover:bg-theme-primary/90'}`}
                           disabled={alreadyToday}
                           onClick={async () => {
                             try {

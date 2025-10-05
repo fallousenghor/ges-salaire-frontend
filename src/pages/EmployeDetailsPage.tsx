@@ -108,26 +108,26 @@ const EmployeDetailsPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Carte des rémunérations */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-green-700 mb-4">Rémunération</h3>
+          <h3 className="text-lg font-semibold text-theme-primary mb-4">Rémunération</h3>
           <div className="space-y-4">
             <div>
               <div className="text-gray-500 font-semibold">Salaire fixe</div>
-              <div className="text-xl font-mono font-bold text-green-700 mt-1">{employe.salaireFixe?.toLocaleString() || '-'} FCFA</div>
+              <div className="text-xl font-mono font-bold text-theme-primary mt-1">{employe.salaireFixe?.toLocaleString() || '-'} FCFA</div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold">Taux journalier</div>
-              <div className="text-xl font-mono font-bold text-green-700 mt-1">{employe.tauxJournalier != null ? employe.tauxJournalier.toLocaleString() : '-'} FCFA</div>
+              <div className="text-xl font-mono font-bold text-theme-primary mt-1">{employe.tauxJournalier != null ? employe.tauxJournalier.toLocaleString() : '-'} FCFA</div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold">Honoraire</div>
-              <div className="text-xl font-mono font-bold text-green-700 mt-1">{employe.honoraire != null ? employe.honoraire.toLocaleString() : '-'} FCFA</div>
+              <div className="text-xl font-mono font-bold text-theme-primary mt-1">{employe.honoraire != null ? employe.honoraire.toLocaleString() : '-'} FCFA</div>
             </div>
           </div>
         </div>
 
         {/* Carte des informations bancaires */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-green-700 mb-4">Informations bancaires</h3>
+          <h3 className="text-lg font-semibold text-theme-primary mb-4">Informations bancaires</h3>
           <div className="space-y-4">
             <div>
               <div className="text-gray-500 font-semibold">Coordonnées bancaires</div>
@@ -138,7 +138,7 @@ const EmployeDetailsPage: React.FC = () => {
 
         {/* Carte de statut et pointage */}
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-green-700 mb-4">Statut & Pointage</h3>
+          <h3 className="text-lg font-semibold text-theme-primary mb-4">Statut & Pointage</h3>
           <div className="space-y-4">
             <div>
               <div className="text-gray-500 font-semibold">Statut</div>
@@ -148,7 +148,7 @@ const EmployeDetailsPage: React.FC = () => {
               <div className="text-gray-500 font-semibold">État du compte</div>
               <div className="text-lg font-semibold mt-1">
                 {employe.actif ? 
-                  <span className="text-green-600">Actif</span> : 
+                  <span className="text-theme-primary">Actif</span> : 
                   <span className="text-gray-400">Inactif</span>
                 }
               </div>
@@ -164,15 +164,15 @@ const EmployeDetailsPage: React.FC = () => {
       {/* Badge QR Code */}
       {employe.badge && (
         <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-          <h3 className="text-lg font-semibold text-green-700 mb-4">Badge d'identification</h3>
-          <div className="flex flex-col items-center p-6 bg-gradient-to-br from-green-50 via-white to-green-50 rounded-xl border-2 border-green-100 shadow-lg max-w-sm mx-auto">
+          <h3 className="text-lg font-semibold text-theme-primary mb-4">Badge d'identification</h3>
+          <div className="flex flex-col items-center p-6 bg-gradient-to-br from-theme-primary/5 via-white to-theme-primary/5 rounded-xl border-2 border-theme-primary/20 shadow-lg max-w-sm mx-auto">
             <div className="mb-4 text-center">
               <div className="text-sm text-gray-500 uppercase tracking-wide mb-1">Matricule</div>
-              <div className="text-2xl font-mono font-bold text-green-700 bg-green-50 px-4 py-2 rounded-lg shadow-sm border border-green-100">
+              <div className="text-2xl font-mono font-bold text-theme-primary bg-theme-primary/5 px-4 py-2 rounded-lg shadow-sm border border-theme-primary/20">
                 {employe.badge.matricule}
               </div>
             </div>
-            <div className="p-4 bg-white rounded-lg shadow-inner border border-green-50">
+            <div className="p-4 bg-white rounded-lg shadow-inner border border-theme-primary/10">
               <img 
                 src={employe.badge.qrCode} 
                 alt="QR Code" 
@@ -189,10 +189,10 @@ const EmployeDetailsPage: React.FC = () => {
 
       {/* Tableau des derniers bulletins de paie */}
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-        <h3 className="text-lg font-semibold text-green-700 mb-4">Derniers bulletins de paie</h3>
+        <h3 className="text-lg font-semibold text-theme-primary mb-4">Derniers bulletins de paie</h3>
         {loadingPayslips ? (
           <div className="text-center py-8">
-            <svg className="animate-spin h-8 w-8 text-green-500 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg className="animate-spin h-8 w-8 text-theme-primary mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
@@ -209,7 +209,7 @@ const EmployeDetailsPage: React.FC = () => {
           </div>
         ) : payslips.length === 0 ? (
           <div className="text-center py-8">
-            <div className="text-gray-400 mb-2">
+            <div className="text-theme-secondary/60 mb-2">
               <svg className="h-8 w-8 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
               </svg>
@@ -220,12 +220,12 @@ const EmployeDetailsPage: React.FC = () => {
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead>
-                <tr className="bg-gray-50">
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Période</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Montant brut</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Net à payer</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                <tr className="bg-theme-primary/5">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-theme-secondary uppercase tracking-wider">Période</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-theme-secondary uppercase tracking-wider">Montant brut</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-theme-secondary uppercase tracking-wider">Net à payer</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-theme-secondary uppercase tracking-wider">Statut</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-theme-secondary uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -242,7 +242,7 @@ const EmployeDetailsPage: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 text-xs font-semibold rounded-full 
-                        ${payslip.statut === 'PAYE' ? 'bg-green-100 text-green-800' : 
+                        ${payslip.statut === 'PAYE' ? 'bg-theme-primary/10 text-theme-primary' : 
                         payslip.statut === 'PARTIEL' ? 'bg-yellow-100 text-yellow-800' : 
                         'bg-gray-100 text-gray-800'}`}>
                         {payslip.statut}
@@ -251,7 +251,7 @@ const EmployeDetailsPage: React.FC = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       <button 
                         onClick={() => downloadPayslipPDF(payslip.id)}
-                        className="text-green-600 hover:text-green-900 font-medium flex items-center gap-1"
+                        className="text-theme-primary hover:text-theme-primary/80 font-medium flex items-center gap-1"
                       >
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
@@ -269,7 +269,7 @@ const EmployeDetailsPage: React.FC = () => {
 
       {/* Informations système */}
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-        <h3 className="text-lg font-semibold text-green-700 mb-4">Informations système</h3>
+        <h3 className="text-lg font-semibold text-theme-primary mb-4">Informations système</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-500">
           <div>
             <span className="font-medium">Créé le :</span> {employe.createdAt ? new Date(employe.createdAt).toLocaleString() : '-'}

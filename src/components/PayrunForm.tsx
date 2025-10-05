@@ -82,8 +82,8 @@ const PayrunForm: React.FC<PayrunFormProps> = ({ onSuccess }) => {
       onSubmit={handleSubmit}
       className="bg-white rounded-2xl shadow-xl p-8  mx-auto mt-8 border border-gray-100 animate-fade-in"
     >
-      <h2 className="text-2xl font-bold  mb-6 text-center flex items-center gap-2 justify-center">
-        <svg className="w-7 h-7 bg-green-400" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 8v8m8-8a8 8 0 11-16 0 8 8 0 0116 0z" /></svg>
+      <h2 className="text-2xl font-bold mb-6 text-center flex items-center gap-2 justify-center text-theme-primary">
+        <svg className="w-7 h-7 text-theme-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 1.343-3 3s1.343 3 3 3 3-1.343 3-3-1.343-3-3-3zm0 0V4m0 8v8m8-8a8 8 0 11-16 0 8 8 0 0116 0z" /></svg>
         Créer un cycle de paie
       </h2>
       <div className="mb-5">
@@ -112,7 +112,7 @@ const PayrunForm: React.FC<PayrunFormProps> = ({ onSuccess }) => {
           value={typePeriode}
           onChange={e => setTypePeriode(e.target.value as TypePeriode)}
           required
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-50"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-primary bg-gray-50"
         >
           <option value="MENSUEL">Mensuel</option>
           <option value="HEBDO">Hebdomadaire</option>
@@ -125,7 +125,7 @@ const PayrunForm: React.FC<PayrunFormProps> = ({ onSuccess }) => {
           value={statut}
           onChange={e => setStatut(e.target.value as StatutPayRun)}
           required
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-gray-50"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-primary bg-gray-50"
         >
           <option value="BROUILLON">Brouillon</option>
           <option value="APPROUVE">Approuvé</option>
@@ -135,15 +135,15 @@ const PayrunForm: React.FC<PayrunFormProps> = ({ onSuccess }) => {
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-green-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-lg shadow transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full bg-theme-primary hover:bg-theme-primary/90 text-white font-bold py-3 px-6 rounded-lg shadow transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {loading ? 'Création en cours...' : 'Créer le cycle de paie'}
       </button>
-      {error && <div className="mt-4 text-red-600 text-center font-semibold">{error}</div>}
+      {error && <div className="mt-4 text-red-500 text-center font-semibold">{error}</div>}
       {success && (
-        <div className="mt-4 text-green-600 text-center font-semibold">
+        <div className="mt-4 text-theme-primary text-center font-semibold">
           Cycle de paie créé !<br />
-          <span className="text-sm text-green-700">Les bulletins de paie des employés ont été générés automatiquement pour ce cycle.</span>
+          <span className="text-sm text-theme-primary/80">Les bulletins de paie des employés ont été générés automatiquement pour ce cycle.</span>
         </div>
       )}
     </form>

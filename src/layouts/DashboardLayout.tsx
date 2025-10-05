@@ -30,7 +30,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     }
   }
   return (
-    <div className="h-screen bg-gray-50 flex">
+    <div className="h-screen bg-theme-primary/5 flex">
       {user?.role === 'superadmin' ? (
         <SuperAdminSidebar isOpen={true} onClose={() => {}} />
       ) : (

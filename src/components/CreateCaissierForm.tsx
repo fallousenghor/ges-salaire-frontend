@@ -57,8 +57,8 @@ const CreateCaissierForm: React.FC<CreateCaissierFormProps> = ({ onSuccess }) =>
       onSubmit={handleSubmit}
       className="bg-white rounded-2xl shadow-xl p-8 max-w-md mx-auto border border-gray-100 animate-fade-in"
     >
-      <h2 className="text-2xl font-bold text-green-700 mb-6 text-center flex items-center gap-2 justify-center">
-        <svg className="w-7 h-7 text-green-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 0v2m0 4v2m8-8a8 8 0 11-16 0 8 8 0 0116 0z" /></svg>
+      <h2 className="text-2xl font-bold text-theme-primary mb-6 text-center flex items-center gap-2 justify-center">
+        <svg className="w-7 h-7 text-theme-primary" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 11c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm0 0v2m0 4v2m8-8a8 8 0 11-16 0 8 8 0 0116 0z" /></svg>
         Créer un caissier
       </h2>
       <div className="mb-5">
@@ -70,7 +70,7 @@ const CreateCaissierForm: React.FC<CreateCaissierFormProps> = ({ onSuccess }) =>
           value={form.nom}
           onChange={handleChange}
           required
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-50"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-primary bg-gray-50"
         />
       </div>
       <div className="mb-5">
@@ -82,7 +82,7 @@ const CreateCaissierForm: React.FC<CreateCaissierFormProps> = ({ onSuccess }) =>
           value={form.prenom}
           onChange={handleChange}
           required
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-50"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-primary bg-gray-50"
         />
       </div>
       <div className="mb-5">
@@ -94,7 +94,7 @@ const CreateCaissierForm: React.FC<CreateCaissierFormProps> = ({ onSuccess }) =>
           value={form.email}
           onChange={handleChange}
           required
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-50"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-primary bg-gray-50"
         />
       </div>
       <div className="mb-8">
@@ -106,18 +106,18 @@ const CreateCaissierForm: React.FC<CreateCaissierFormProps> = ({ onSuccess }) =>
           value={form.motDePasse}
           onChange={handleChange}
           required
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-50"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-theme-primary bg-gray-50"
         />
       </div>
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg shadow transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
+        className="w-full bg-theme-primary hover:bg-theme-primary/90 text-white font-bold py-3 px-6 rounded-lg shadow transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {loading ? 'Création...' : 'Créer le caissier'}
       </button>
       {error && <div className="mt-4 text-red-600 text-center font-semibold">{error}</div>}
-      {success && <div className="mt-4 text-green-600 text-center font-semibold">Caissier créé avec succès !</div>}
+      {success && <div className="mt-4 text-theme-primary text-center font-semibold">Caissier créé avec succès !</div>}
     </form>
   );
 };

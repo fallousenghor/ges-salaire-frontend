@@ -3,6 +3,7 @@ import { messagesFr } from '../utils/message.fr';
 import type { CompanyFormProps } from "../types/propsType";
 import { useEntrepriseForm } from '../hooks/useEntrepriseForm';
 import { LogoUpload } from './LogoUpload';
+import { ColorPicker } from './ColorPicker';
 
 
 
@@ -183,6 +184,19 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ entrepriseId }) => {
         
       </div>
 
+      <div className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <ColorPicker
+          label="Couleur primaire"
+          value={form.couleurPrimaire || "#2563eb"}
+          onChange={(value) => setForm(prev => ({ ...prev, couleurPrimaire: value }))}
+        />
+        <ColorPicker
+          label="Couleur secondaire"
+          value={form.couleurSecondaire || "#1e40af"}
+          onChange={(value) => setForm(prev => ({ ...prev, couleurSecondaire: value }))}
+        />
+      </div>
+
       {/* <div className="mb-6">
         <LogoUpload onFileSelect={(file) => {
           setForm((prev) => ({ ...prev, logo: file }));
@@ -193,8 +207,7 @@ const CompanyForm: React.FC<CompanyFormProps> = ({ entrepriseId }) => {
         <button
           type="submit"
           disabled={loading}
-          className="px-6 py-3 font-semibold rounded-lg shadow disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ background: '#1976d2', color: '#fff', border: 'none' }}
+          className="px-6 py-3 font-semibold rounded-lg shadow disabled:opacity-50 disabled:cursor-not-allowed btn-primary"
         >
           {loading ? messagesFr.enregistrement : entrepriseId ? messagesFr.enregistrer : messagesFr.creer}
         </button>
