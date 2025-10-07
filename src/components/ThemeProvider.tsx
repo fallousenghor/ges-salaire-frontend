@@ -2,17 +2,30 @@ import React from 'react';
 import { useEntrepriseColors } from '../hooks/useEntrepriseColors';
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  useEntrepriseColors();
+  const { isLoaded } = useEntrepriseColors();
+
+  if (!isLoaded) {
+    return null;
+  }
 
   return (
-    <>
+    <div className="theme-content">
       <style>
         {`
-          :root {
-            --primary-color: #2563eb;
-            --secondary-color: #1e40af;
-            --primary-color-hover: #1d4ed8;
-            --secondary-color-hover: #1e3a8a;
+          .theme-content {
+            opacity: 1;
+            transition: opacity 0.3s ease-in;
+          }
+
+          /* Masquer tout le contenu jusqu'à ce que les couleurs soient chargées */
+          .theme-ready {
+            opacity: 0;
+            transition: opacity 0.3s ease-in;
+          }
+
+          /* Afficher le contenu une fois les couleurs chargées */
+          .theme-ready.loaded {
+            opacity: 1;
           }
 
           .btn-primary {
@@ -61,6 +74,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         `}
       </style>
       {children}
-    </>
+    </div>
   );
 };

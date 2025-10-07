@@ -12,6 +12,8 @@ export interface Payslip {
   payrunId?: number;
   brut?: number;
   deductions?: number;
+  impotRevenu?: number;
+  cotisationSociale?: number;
   netAPayer: number;
   periode?: string;
   approuveAdmin: boolean;

@@ -15,12 +15,38 @@ const PayslipForm: React.FC<PayslipFormProps> = ({ onSuccess }) => {
   const [employeId, setEmployeId] = useState('');
   const [payrunId, setPayrunId] = useState('');
   const [brut, setBrut] = useState('');
-  const [deductions, setDeductions] = useState('');
   const [netAPayer, setNetAPayer] = useState('');
   const [statut, setStatut] = useState<StatutPayslip>('EN_ATTENTE');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+
+  // Calcul automatique des déductions et du net à payer
+  const calculDeductions = (brutSalaire: number) => {
+    const impotRevenu = brutSalaire * 0.18; // 18% d'impôt sur le revenu
+    const cotisationSociale = brutSalaire > 250000 ? brutSalaire * 0.05 : brutSalaire * 0.02; // 5% ou 2% selon le seuil
+    const totalDeductions = impotRevenu + cotisationSociale;
+    return { impotRevenu, cotisationSociale, totalDeductions };
+  };
+
+  // Mise à jour du salaire net quand le brut change
+  const updateSalaryCalculations = (brutValue: string) => {
+    const brutNumber = Number(brutValue);
+    if (!isNaN(brutNumber)) {
+      const { totalDeductions } = calculDeductions(brutNumber);
+      const net = brutNumber - totalDeductions;
+      setNetAPayer(net.toString());
+    } else {
+      setNetAPayer('');
+    }
+  };
+
+  // Gestionnaire de changement pour le salaire brut
+  const handleBrutChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newBrut = e.target.value;
+    setBrut(newBrut);
+    updateSalaryCalculations(newBrut);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,19 +54,23 @@ const PayslipForm: React.FC<PayslipFormProps> = ({ onSuccess }) => {
     setError(null);
     setSuccess(false);
     try {
+      const brutNumber = Number(brut);
+      const { impotRevenu, cotisationSociale, totalDeductions } = calculDeductions(brutNumber);
+      // Création et envoi du bulletin de paie
       await createPayslip({
         employeId: Number(employeId),
         payrunId: Number(payrunId),
-        brut: Number(brut),
-        deductions: Number(deductions),
-        netAPayer: Number(netAPayer),
+        brut: brutNumber,
+        deductions: totalDeductions,
+        impotRevenu,
+        cotisationSociale,
+        netAPayer: brutNumber - totalDeductions,
         statut,
       });
       setSuccess(true);
       setEmployeId('');
       setPayrunId('');
       setBrut('');
-      setDeductions('');
       setNetAPayer('');
       setStatut('EN_ATTENTE');
       if (onSuccess) onSuccess();
@@ -92,35 +122,41 @@ const PayslipForm: React.FC<PayslipFormProps> = ({ onSuccess }) => {
         <input
           type="number"
           value={brut}
-          onChange={e => setBrut(e.target.value)}
+          onChange={handleBrutChange}
           required
           min="0"
           step="0.01"
           className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-50"
         />
       </div>
-      <div className="mb-5">
-        <label className="block text-gray-700 font-semibold mb-2">Déductions</label>
-        <input
-          type="number"
-          value={deductions}
-          onChange={e => setDeductions(e.target.value)}
-          required
-          min="0"
-          step="0.01"
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-50"
-        />
-      </div>
+      {brut && Number(brut) > 0 && (
+        <div className="mb-5 p-4 bg-gray-50 rounded-lg">
+          <h3 className="font-semibold text-gray-700 mb-3">Détails des déductions</h3>
+          <div className="space-y-2 text-sm">
+            <p className="flex justify-between">
+              <span>Impôt sur le revenu (18%)</span>
+              <span>{(Number(brut) * 0.18).toLocaleString()} FCFA</span>
+            </p>
+            <p className="flex justify-between">
+              <span>Cotisation sociale ({Number(brut) > 250000 ? '5%' : '2%'})</span>
+              <span>{(Number(brut) * (Number(brut) > 250000 ? 0.05 : 0.02)).toLocaleString()} FCFA</span>
+            </p>
+            <div className="border-t pt-2 mt-2">
+              <p className="flex justify-between font-semibold">
+                <span>Total des déductions</span>
+                <span>{(Number(brut) * 0.18 + Number(brut) * (Number(brut) > 250000 ? 0.05 : 0.02)).toLocaleString()} FCFA</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="mb-5">
         <label className="block text-gray-700 font-semibold mb-2">Net à payer</label>
         <input
           type="number"
           value={netAPayer}
-          onChange={e => setNetAPayer(e.target.value)}
-          required
-          min="0"
-          step="0.01"
-          className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 bg-gray-50"
+          readOnly
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-100 text-gray-700 font-semibold"
         />
       </div>
       <div className="mb-8">

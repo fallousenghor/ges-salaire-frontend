@@ -34,7 +34,7 @@ const CreateCaissierForm: React.FC<CreateCaissierFormProps> = ({ onSuccess }) =>
       return;
     }
     try {
-      await apiFetch('/auth/register', {
+      await apiFetch('/user/register', {
         method: 'POST',
         body: JSON.stringify({
           ...form,

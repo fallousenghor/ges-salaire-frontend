@@ -7,6 +7,8 @@ export interface CreatePayslipData {
   payrunId: number;
   brut: number;
   deductions?: number;
+  impotRevenu?: number;
+  cotisationSociale?: number;
   netAPayer: number;
   statut?: StatutPayslip;
   verrouille?: boolean;

@@ -1,22 +1,47 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useCurrentEntreprise } from './useCurrentEntreprise';
+import { useAuth } from './useAuth';
 
 export const useEntrepriseColors = () => {
   const { entreprise } = useCurrentEntreprise();
+  const { user } = useAuth();
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    if (entreprise) {
-      const root = document.documentElement;
-      
-      // Définir les variables CSS personnalisées
+    const root = document.documentElement;
+    
+    // Empêcher l'affichage des couleurs par défaut pendant le chargement
+    root.style.setProperty('opacity', '0');
+
+    if (!user) {
+      setIsLoaded(true);
+      root.style.setProperty('opacity', '1');
+      return;
+    }
+
+    if (user.role === 'SUPER_ADMIN') {
+      // Couleurs pour le super admin
+      root.style.setProperty('--primary-color', '#3b82f6');
+      root.style.setProperty('--secondary-color', '#1d4ed8');
+      root.style.setProperty('--primary-color-hover', '#2563eb');
+      root.style.setProperty('--secondary-color-hover', '#1e40af');
+      setIsLoaded(true);
+      root.style.setProperty('opacity', '1');
+      return;
+    }
+
+    if (user.role === 'ADMIN' && entreprise) {
+      // Couleurs de l'entreprise pour l'admin
       root.style.setProperty('--primary-color', entreprise.couleurPrimaire);
       root.style.setProperty('--secondary-color', entreprise.couleurSecondaire);
       root.style.setProperty('--primary-color-hover', adjustBrightness(entreprise.couleurPrimaire, -20));
       root.style.setProperty('--secondary-color-hover', adjustBrightness(entreprise.couleurSecondaire, -20));
+      setIsLoaded(true);
+      root.style.setProperty('opacity', '1');
     }
-  }, [entreprise]);
+  }, [entreprise, user]);
 
-  return { entreprise };
+  return { entreprise, isLoaded };
 };
 
 // Fonction utilitaire pour ajuster la luminosité d'une couleur hexadécimale
