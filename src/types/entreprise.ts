@@ -21,4 +21,19 @@ export interface Entreprise {
   createdAt?: string;
   updatedAt?: string;
   createurId?: number;
+  superAdminAccess?: Array<{
+    superAdminId: number;
+    entrepriseId: number;
+    hasAccess: boolean;
+    createdAt: string;
+    updatedAt: string;
+    superAdmin: {
+      user: {
+        id: number;
+        nom: string;
+        prenom: string;
+        email: string;
+      }
+    }
+  }>;
 }

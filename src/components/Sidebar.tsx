@@ -25,10 +25,14 @@ export const Sidebar = ({ activeItem, setActiveItem }: SidebarProps) => {
   const generalItem = generalItems;
   const { logout } = useLogout();
   const navigate = useNavigate();
+  const [showSettings, setShowSettings] = useState(false);
+
   const handleGeneralClick = (itemId: string) => {
     if (itemId === 'logout') {
       logout();
       navigate('/login');
+    } else if (itemId === 'settings') {
+      setShowSettings(!showSettings);
     }
   };
   // Couleurs statiques
@@ -74,14 +78,28 @@ export const Sidebar = ({ activeItem, setActiveItem }: SidebarProps) => {
           <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">General</h3>
           <div className="space-y-1">
             {generalItem.map((item) => (
-              <button
-                key={item.id}
-                className="w-full flex items-center cursor-pointer space-x-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
-                onClick={() => handleGeneralClick(item.id)}
-              >
-                <item.icon className="w-5 h-5" />
-                <span className="flex-1 text-left">{item.label}</span>
-              </button>
+              <div key={item.id}>
+                <button
+                  className="w-full flex items-center cursor-pointer space-x-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+                  onClick={() => handleGeneralClick(item.id)}
+                >
+                  <item.icon className="w-5 h-5" />
+                  <span className="flex-1 text-left">{item.label}</span>
+                </button>
+                {item.items && showSettings && item.id === 'settings' && (
+                  <div className="pl-8 space-y-1 mt-1">
+                    {item.items.map((subItem) => (
+                      <button
+                        key={subItem.id}
+                        className="w-full flex items-center cursor-pointer space-x-3 px-3 py-2 text-sm font-medium text-gray-600 rounded-lg hover:bg-gray-50 transition-colors"
+                        onClick={() => navigate(subItem.path)}
+                      >
+                        <span className="flex-1 text-left">{subItem.label}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             ))}
           </div>
         </div>

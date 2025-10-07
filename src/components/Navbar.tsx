@@ -1,5 +1,5 @@
 
-import { Bell, Building2, Menu, Search } from "lucide-react";
+import { Bell,  Building2, Menu, Search } from "lucide-react";
 
 import type { SuperAdminNavbarProps } from "../types/propsType";
 import { useState } from "react";

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { apiFetch } from "../api/apiFetch";
 import { payerPayslip } from "../services/paiementService";
 import { emit } from "../utils/eventBus";
+import Pagination from "../components/common/Pagination";
 
 interface Payslip {
   id: number;
@@ -18,22 +19,43 @@ export default function BultinPaix() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [payingId, setPayingId] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    apiFetch(`/payslips`)
-      .then((data) => setPayslips(data))
+    apiFetch(`/payslips?page=${currentPage}&limit=10`)
+      .then((data) => {
+        if (data.items) {
+          setPayslips(data.items);
+          setTotalPages(data.totalPages);
+          setHasMore(data.hasMore);
+        } else {
+          setPayslips(data);
+          setTotalPages(1);
+          setHasMore(false);
+        }
+      })
       .catch(() => setError("Erreur de chargement des bulletins."))
       .finally(() => setLoading(false));
-  }, []);
+  }, [currentPage]);
 
   const handlePayer = async (payslipId: number, montant: number) => {
     setPayingId(payslipId);
     try {
       await payerPayslip({ payslipId, montant, mode: "VIREMENT" });
       // Recharge la liste depuis l'API pour garantir la persistance
-      const data = await apiFetch(`/payslips`);
-      setPayslips(data);
+      const data = await apiFetch(`/payslips?page=${currentPage}&limit=10`);
+      if (data.items) {
+        setPayslips(data.items);
+        setTotalPages(data.totalPages);
+        setHasMore(data.hasMore);
+      } else {
+        setPayslips(data);
+        setTotalPages(1);
+        setHasMore(false);
+      }
       try {
         emit('paiement:created', { montant, payslipId });
       } catch {
@@ -142,9 +164,24 @@ export default function BultinPaix() {
                 </tr>
               ))
             )}
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Pagination */}
+        {payslips.length > 0 && (
+          <div className="bg-white py-4 px-4">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              hasMore={hasMore}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+                setSearch(""); // Réinitialiser la recherche lors du changement de page
+              }}
+            />
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
 }

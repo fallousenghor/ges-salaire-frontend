@@ -4,8 +4,16 @@ import { apiFetch } from "../api/apiFetch";
 import type { Entreprise, EntrepriseFormData } from "../types/entreprise";
 
 
-export async function getEntreprises(): Promise<{ success: boolean; data: Entreprise[] }> {
-  return apiFetch("/entreprise");
+export interface PaginatedResponse<T> {
+  items: T[];
+  total: number;
+  page: number;
+  totalPages: number;
+  hasMore: boolean;
+}
+
+export async function getEntreprises(page: number = 1, limit: number = 10): Promise<{ success: boolean; data: PaginatedResponse<Entreprise> }> {
+  return apiFetch(`/entreprise?page=${page}&limit=${limit}`);
 }
 
 export async function getEntreprise(id: string): Promise<{ success: boolean; data: Entreprise }> {

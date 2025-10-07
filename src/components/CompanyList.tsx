@@ -1,20 +1,20 @@
-import React, { useEffect, useState, useCallback, useMemo } from "react";
+import { type ReactElement, useEffect, useState, useCallback, useMemo } from "react";
 import CompanyForm from "./CompanyForm";
-import { Edit3, Trash2, Power, Loader2 } from "lucide-react";
+import { Edit3, Trash2, Power, Loader2, LogIn } from "lucide-react";
 import { getEntreprises, deleteEntreprise as deleteEntrepriseApi, closeEntreprise as closeEntrepriseApi } from "../services/entrepriseService";
+import { superAdminAccessService } from "../services/superAdminAccess.service";
+
 import type { Entreprise } from "../types/entreprise";
 import { messagesFr } from "../utils/message.fr";
 import EntrepriseDetails from "./EntrepriseDetails";
 import { getLogoUrl } from '../utils/uploads';
 import toast from 'react-hot-toast';
+import Pagination from "./common/Pagination";
 
+import type { User } from "../context/AuthContextOnly";
 
-const deleteEntreprise = async (id: number) => deleteEntrepriseApi(String(id));
-const closeEntreprise = async (id: number) => closeEntrepriseApi(String(id));
-
-
-
-const CompanyList: React.FC = () => {
+const CompanyList = (): ReactElement => {
+  // États
   const [entreprises, setEntreprises] = useState<Entreprise[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,29 +23,76 @@ const CompanyList: React.FC = () => {
   const [editEntreprise, setEditEntreprise] = useState<Entreprise | null>(null);
   const [search, setSearch] = useState("");
   const [statutFilter, setStatutFilter] = useState("all");
+  const [accessLoadingState, setAccessLoadingState] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
 
-
-  const user = useMemo(() => {
-    return JSON.parse(localStorage.getItem('user') || 'null');
+  // Mémorisation du user
+  const user = useMemo<User | null>(() => {
+    const userData = localStorage.getItem('user');
+    return userData ? JSON.parse(userData) : null;
   }, []);
+
+  // Helper functions
+  const deleteEntreprise = useCallback(async (id: number): Promise<void> => {
+    await deleteEntrepriseApi(String(id));
+  }, []);
+
+  const closeEntreprise = useCallback(async (id: number): Promise<void> => {
+    await closeEntrepriseApi(String(id));
+  }, []);
+
+  const handleAccessEntreprise = async (entrepriseId: number) => {
+    try {
+      setAccessLoadingState(entrepriseId);
+      
+      // Trouver l'entreprise dans la liste
+      const entreprise = entreprises.find(e => e.id === entrepriseId);
+      if (!entreprise) {
+        throw new Error('Entreprise non trouvée');
+      }
+
+      // Faire une requête pour obtenir un nouveau token avec les droits d'admin pour cette entreprise
+      const response = await superAdminAccessService.switchToAdmin(entrepriseId);
+      const { token, user: updatedUser } = response.data;
+
+      // Sauvegarder le nouveau token
+      localStorage.setItem('token', token);
+      
+      // Sauvegarder l'entreprise actuelle
+      localStorage.setItem('currentEntreprise', JSON.stringify(entreprise));
+      
+      // Sauvegarder les informations utilisateur mises à jour
+      localStorage.setItem('user', JSON.stringify(updatedUser));
+      
+      // Rediriger vers le dashboard de l'entreprise
+      window.location.href = `/dashboard`;
+    } catch (error) {
+      console.error('Erreur lors de l\'accès à l\'entreprise:', error);
+      toast.error('Erreur lors de l\'accès à l\'entreprise');
+    } finally {
+      setAccessLoadingState(null);
+    }
+  };
   const fetchEntreprises = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getEntreprises();
-      let entreprises: Entreprise[] = Array.isArray(data?.data) ? data.data : [];
-     
-      if (user?.role === 'superadmin' && user?.id) {
-        entreprises = entreprises.filter((e) => e.createurId === user.id);
-      }
-      setEntreprises(entreprises);
+      const response = await getEntreprises(currentPage);
+      const { items, totalPages: total, hasMore: more } = response.data;
+      console.log('Entreprises reçues (détaillé):', JSON.stringify(items, null, 2));
+      console.log('User actuel:', user);
+      setEntreprises(items);
+      setTotalPages(total);
+      setHasMore(more);
     } catch (e: unknown) {
       if (e instanceof Error) setError(e.message);
       else setError(messagesFr.erreurChargement);
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [currentPage, user]);
 
   useEffect(() => {
     fetchEntreprises();
@@ -107,41 +154,56 @@ const CompanyList: React.FC = () => {
     ), { duration: 8000 });
   };
 
-  if (loading) return (
-    <div className="flex items-center justify-center p-8">
-      <div className="flex items-center gap-3 text-blue-600">
-        <Loader2 className="w-6 h-6 animate-spin" />
-        <span className="text-lg font-medium">Chargement...</span>
+  // Filtrage combiné (utilisateur + recherche + statut)
+  const filteredEntreprises = useMemo(() => {
+    if (!entreprises) return [];
+    
+    const filtered = [...entreprises];
+
+    // Pour le super admin, pas de filtrage - il voit toutes les entreprises
+    // Le filtrage se fait uniquement au niveau du bouton d'accès    // Filtre par recherche et statut
+    return filtered.filter((company) => {
+      const matchSearch = company.nom.toLowerCase().includes(search.toLowerCase());
+      const matchStatut = statutFilter === "all" || company.statut === statutFilter;
+      return matchSearch && matchStatut;
+    });
+  }, [entreprises, search, statutFilter]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="flex items-center gap-3 text-blue-600">
+          <Loader2 className="w-6 h-6 animate-spin" />
+          <span className="text-lg font-medium">Chargement...</span>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
   
   if (error) {
     toast.error(error);
-    return null;
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-red-600">Une erreur est survenue</div>
+      </div>
+    );
   }
-
-  // Filtrage local
-  const filteredEntreprises = entreprises.filter((company) => {
-    const matchSearch = company.nom.toLowerCase().includes(search.toLowerCase());
-    const matchStatut = statutFilter === "all" || company.statut === statutFilter;
-    return matchSearch && matchStatut;
-  });
-
+  
+  // Return du JSX
   return (
-    <div className="p-6 bg-gray-50 ">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="flex flex-col gap-4 px-6 py-4 border-b border-gray-100">
-            <div className="flex justify-between items-center">
-              <h1 className="text-xl font-bold text-gray-800">Liste des entreprises</h1>
-              <button
-                className="flex items-center cursor-pointer gap-2 py-2 px-5 rounded-lg shadow transition-all duration-300 hover:scale-105 btn-primary"
-                onClick={() => setShowModal(true)}
-              >
-                <span className="font-semibold">{messagesFr.creerEntreprise}</span>
-              </button>
-            </div>
+      <div className="p-6 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <div className="flex flex-col gap-4 px-6 py-4 border-b border-gray-100">
+              <div className="flex justify-between items-center">
+                <h1 className="text-xl font-bold text-gray-800">Liste des entreprises</h1>
+                <button
+                  className="flex items-center cursor-pointer gap-2 py-2 px-5 rounded-lg shadow transition-all duration-300 hover:scale-105 btn-primary"
+                  onClick={() => setShowModal(true)}
+                >
+                  <span className="font-semibold">{messagesFr.creerEntreprise}</span>
+                </button>
+              </div>
             <div className="flex gap-4 items-center">
               <input
                 type="text"
@@ -239,6 +301,29 @@ const CompanyList: React.FC = () => {
                         >
                           <Power className="w-4 h-4" />
                         </button>
+                        {/* Bouton d'accès pour le super admin */}
+                        {user?.role === 'SUPER_ADMIN' && (
+                          company.superAdminAccess?.some(access => 
+                            access.superAdmin.user.id === Number(user?.id) && access.hasAccess
+                          ) ? (
+                            <button 
+                              className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md bg-green-50 text-green-600 border border-green-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                              onClick={() => handleAccessEntreprise(Number(company.id))}
+                              disabled={accessLoadingState === company.id}
+                              title="Accéder en tant qu'admin"
+                            >
+                              {accessLoadingState === company.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <LogIn className="w-4 h-4" />}
+                            </button>
+                          ) : (
+                            <button 
+                              className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md bg-gray-100 text-gray-400 border border-gray-300"
+                              disabled
+                              title="En attente d'invitation"
+                            >
+                              <LogIn className="w-4 h-4" />
+                            </button>
+                          )
+                        )}
                         <button
                           className="inline-flex items-center cursor-pointer justify-center w-9 h-9 rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md bg-theme-secondary/10 text-theme-secondary border border-theme-secondary"
                           onClick={() => setSelectedEntreprise(company)}
@@ -253,6 +338,21 @@ const CompanyList: React.FC = () => {
               </tbody>
             </table>
           </div>
+
+          {/* Pagination */}
+          {entreprises.length > 0 && (
+            <div className="bg-white py-4 px-4">
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                hasMore={hasMore}
+                onPageChange={(page) => {
+                  setCurrentPage(page);
+                  setSearch(""); // Réinitialiser la recherche lors du changement de page
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
       {/* Modal pour création entreprise */}

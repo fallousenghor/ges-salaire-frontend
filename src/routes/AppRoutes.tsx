@@ -1,5 +1,4 @@
 import CreateCaissierPage from '../pages/CreateCaissierPage';
-
 import CycleBulletinsPage from '../pages/CycleBulletinsPage';
 import PayrunPage from "../pages/PayrunPage";
 import PayslipPage from "../pages/PayslipPage";
@@ -26,6 +25,7 @@ import ChangePasswordPage from '../pages/ChangePasswordPage';
 import SuperAdminLayout from "../layouts/SuperAdminLayout";
 import Superadmin from "../pages/Superadmin";
 import { getUser } from '../services/authService';
+import { SuperAdminAccessPage } from '../pages/parametres/SuperAdminAccess';
 
 
 function AppRoutesInner() {
@@ -164,6 +164,13 @@ function AppRoutesInner() {
         <RequireAuth>
           <DashboardLayout>
             <CreateCaissierPage />
+          </DashboardLayout>
+        </RequireAuth>
+      } />
+      <Route path="/parametres/acces-super-admin" element={
+        <RequireAuth>
+          <DashboardLayout>
+            <SuperAdminAccessPage />
           </DashboardLayout>
         </RequireAuth>
       } />

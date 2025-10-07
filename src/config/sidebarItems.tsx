@@ -16,8 +16,12 @@ export const menuItems = [
 ];
 
 
+export const settingsItems = [
+  { id: 'access-settings', label: 'Accès Super Admin', path: '/parametres/acces-super-admin' },
+];
+
 export const generalItems = [
-  { id: 'settings', icon: Settings, label: messagesFr.parametres },
+  { id: 'settings', icon: Settings, label: messagesFr.parametres, items: settingsItems },
   { id: 'logout', icon: LogOut, label: messagesFr.deconnexion }
 ];
  

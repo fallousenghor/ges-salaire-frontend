@@ -98,81 +98,67 @@ function EmployePage() {
             <p className="text-lg font-semibold">Aucun employé trouvé pour cette entreprise.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-xl shadow-lg border border-theme-primary/20 bg-white">
-            <table className="min-w-full divide-y divide-theme-primary/10">
-              <thead className="bg-theme-primary/5">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-theme-secondary uppercase tracking-wider">Matricule</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-theme-secondary uppercase tracking-wider">Nom complet</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-theme-secondary uppercase tracking-wider">Poste</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-theme-secondary uppercase tracking-wider">Type contrat</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-theme-secondary uppercase tracking-wider">Salaire fixe</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-theme-secondary uppercase tracking-wider">Taux journalier</th>
-                  <th className="px-6 py-4 text-left text-xs font-bold text-theme-secondary uppercase tracking-wider">Honoraire</th>
-                  {/* <th className="px-6 py-4 text-left text-xs font-bold text-theme-secondary uppercase tracking-wider">Coord. bancaires</th> */}
-                  <th className="px-6 py-4 text-left text-xs font-bold text-theme-secondary uppercase tracking-wider">Actif</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-theme-primary/5">
-                {filteredEmployes.map((employe, idx) => (
-                  <tr
-                    key={employe.id}
-                    className={
-                      (idx % 2 === 0 ? "bg-white hover:bg-theme-primary/5 transition" : "bg-theme-primary/5 hover:bg-theme-primary/10 transition") +
-                      " cursor-pointer"
-                    }
-                    onClick={() => navigate(`/employes/${employe.id}`)}
-                  >
-                    <td className="px-6 py-4 font-mono text-theme-primary whitespace-nowrap">{employe.badge?.matricule || '-'}</td>
-                    <td className="px-6 py-4 font-semibold text-gray-900 whitespace-nowrap flex items-center gap-2">
-                      {employe.nomComplet}
-                    </td>
-                    <td className="px-6 py-4 text-gray-700 whitespace-nowrap">{employe.poste}</td>
-                    <td className="px-6 py-4 text-gray-700 whitespace-nowrap">
-                      <span className={`px-2 py-1 rounded-full text-xs font-semibold ${employe.typeContrat === 'FIXE' ? 'bg-theme-primary/10 text-theme-primary' : 'bg-theme-secondary/10 text-theme-secondary'}`}>{employe.typeContrat}</span>
-                    </td>
-                    <td className="px-6 py-4 text-theme-primary whitespace-nowrap font-mono font-bold">{employe.salaireFixe?.toLocaleString()} FCFA</td>
-                    <td className="px-6 py-4 text-theme-primary whitespace-nowrap font-mono">{typeof employe.tauxJournalier === 'number' ? `${employe.tauxJournalier.toLocaleString()} FCFA` : '-'}</td>
-                    <td className="px-6 py-4 text-theme-primary whitespace-nowrap font-mono">{typeof employe.honoraire === 'number' ? `${employe.honoraire.toLocaleString()} FCFA` : '-'}</td>
-                    {/* <td className="px-6 py-4 text-gray-700 whitespace-nowrap">{employe.coordonneesBancaires}</td> */}
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {employe.actif ? (
-                        <span className="inline-flex items-center gap-1 text-theme-primary font-semibold"><span className="inline-block w-3 h-3 bg-theme-primary rounded-full"></span> Oui</span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1 text-gray-400 font-semibold"><span className="inline-block w-3 h-3 bg-gray-300 rounded-full"></span> Non</span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {/* <button
-                        className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded shadow text-xs font-bold disabled:bg-gray-300 disabled:cursor-not-allowed"
-                        disabled={(() => {
-                          const last = pointages[employe.id];
-                          if (!last) return false;
-                          const lastDate = new Date(last);
-                          const now = new Date();
-                          return lastDate.getFullYear() === now.getFullYear() &&
-                                 lastDate.getMonth() === now.getMonth() &&
-                                 lastDate.getDate() === now.getDate();
-                        })()}
-                        onClick={async e => {
-                          e.stopPropagation();
-                          try {
-                            await pointerEmploye(employe.id);
-                            toast.success('Pointage enregistré !');
-                            setPointages(p => ({ ...p, [employe.id]: new Date().toISOString() }));
-                          } catch {
-                            toast.error('Erreur lors du pointage');
-                          }
-                        }}
-                      >
-                        Pointage
-                      </button> */}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+      <div className="overflow-x-auto rounded-xl shadow-md border border-theme-primary/10 bg-white">
+  <table className="min-w-full divide-y divide-theme-primary/10 text-sm">
+    <thead className="bg-theme-primary/5 sticky top-0 z-10">
+      <tr>
+        <th className="px-6 py-4 text-left font-semibold text-theme-secondary uppercase tracking-wider">Matricule</th>
+        <th className="px-6 py-4 text-left font-semibold text-theme-secondary uppercase tracking-wider">Nom complet</th>
+        <th className="px-6 py-4 text-left font-semibold text-theme-secondary uppercase tracking-wider">Poste</th>
+        <th className="px-6 py-4 text-center font-semibold text-theme-secondary uppercase tracking-wider">Contrat</th>
+        <th className="px-6 py-4 text-right font-semibold text-theme-secondary uppercase tracking-wider">Salaire</th>
+        <th className="px-6 py-4 text-right font-semibold text-theme-secondary uppercase tracking-wider">Taux J.</th>
+        <th className="px-6 py-4 text-right font-semibold text-theme-secondary uppercase tracking-wider">Honoraire</th>
+        <th className="px-6 py-4 text-center font-semibold text-theme-secondary uppercase tracking-wider">Actif</th>
+      </tr>
+    </thead>
+    <tbody className="divide-y divide-theme-primary/5">
+      {filteredEmployes.map((employe, idx) => (
+        <tr
+          key={employe.id}
+          className={`transition-colors ${
+            idx % 2 === 0 ? "bg-white" : "bg-theme-primary/5"
+          } hover:bg-theme-primary/10 cursor-pointer`}
+          onClick={() => navigate(`/employes/${employe.id}`)}
+        >
+          <td className="px-6 py-4 font-mono text-theme-primary">{employe.badge?.matricule || '-'}</td>
+          <td className="px-6 py-4 font-medium text-gray-800">{employe.nomComplet}</td>
+          <td className="px-6 py-4 text-gray-600">{employe.poste}</td>
+          <td className="px-6 py-4 text-center">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-theme-primary/10 text-theme-primary">
+              {employe.typeContrat}
+            </span>
+          </td>
+          <td className="px-6 py-4 text-right font-mono text-theme-primary font-semibold">
+            {employe.salaireFixe?.toLocaleString() || "-"} FCFA
+          </td>
+          <td className="px-6 py-4 text-right font-mono text-theme-primary">
+            {typeof employe.tauxJournalier === "number"
+              ? `${employe.tauxJournalier.toLocaleString()} FCFA`
+              : "-"}
+          </td>
+          <td className="px-6 py-4 text-right font-mono text-theme-primary">
+            {typeof employe.honoraire === "number"
+              ? `${employe.honoraire.toLocaleString()} FCFA`
+              : "-"}
+          </td>
+          <td className="px-6 py-4 text-center">
+            {employe.actif ? (
+              <span className="inline-flex items-center gap-1 text-theme-primary font-medium">
+                <span className="w-3 h-3 bg-theme-primary rounded-full"></span> Oui
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-gray-400 font-medium">
+                <span className="w-3 h-3 bg-gray-300 rounded-full"></span> Non
+              </span>
+            )}
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
         )
       )}
     </div>

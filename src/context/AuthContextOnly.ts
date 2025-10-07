@@ -9,7 +9,7 @@ export interface Role {
 export interface User {
   id: string;
   email: string;
-  role: "superadmin" | "admin" | "caissier";
+  role: "SUPER_ADMIN" | "ADMIN" | "CAISSIER";
   entrepriseId?: number;
   roles?: Role[];
 }

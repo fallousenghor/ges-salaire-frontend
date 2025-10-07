@@ -22,7 +22,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   };
 
   // RBAC : caissier n'a accès qu'aux paiements
-  if (user?.role === 'caissier') {
+  if (user?.role === 'CAISSIER') {
     // Rediriger si la route n'est pas /paiements
     if (!location.pathname.startsWith('/paiements')) {
       navigate('/paiements', { replace: true });
@@ -31,7 +31,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   }
   return (
     <div className="h-screen bg-theme-primary/5 flex">
-      {user?.role === 'superadmin' ? (
+      {user?.role === 'SUPER_ADMIN' ? (
         <SuperAdminSidebar isOpen={true} onClose={() => {}} />
       ) : (
         <Sidebar activeItem={activeItem} setActiveItem={setActiveItem} />

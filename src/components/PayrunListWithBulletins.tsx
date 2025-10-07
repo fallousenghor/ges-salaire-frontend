@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { apiFetch } from '../api/apiFetch';
 import PayrunForm from './PayrunForm';
+import Pagination from './common/Pagination';
 
 interface Payrun {
   id: number;
@@ -15,14 +16,21 @@ export default function PayrunListWithBulletins() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    apiFetch('/payrun')
-      .then((data) => setPayruns(data))
+    apiFetch(`/payrun?page=${currentPage}&limit=10`)
+      .then((data) => {
+        setPayruns(data.items);
+        setTotalPages(data.totalPages);
+        setHasMore(data.hasMore);
+      })
       .catch(() => setError('Erreur de chargement des cycles.'))
       .finally(() => setLoading(false));
-  }, []);
+  }, [currentPage]);
 
   return (
     <div className="mb-8 max-w-3xl mx-auto">
@@ -48,7 +56,17 @@ export default function PayrunListWithBulletins() {
               ×
             </button>
             <h3 className="text-lg font-bold mb-4 text-center">Nouveau cycle de paie</h3>
-            <PayrunForm onSuccess={() => { setShowForm(false); setLoading(true); apiFetch('/payrun').then((data) => setPayruns(data)).finally(() => setLoading(false)); }} />
+            <PayrunForm onSuccess={() => {
+              setShowForm(false);
+              setLoading(true);
+              apiFetch(`/payrun?page=${currentPage}&limit=10`)
+                .then((data) => {
+                  setPayruns(data.items);
+                  setTotalPages(data.totalPages);
+                  setHasMore(data.hasMore);
+                })
+                .finally(() => setLoading(false));
+            }} />
           </div>
         </div>
       )}
@@ -116,6 +134,13 @@ export default function PayrunListWithBulletins() {
           </tbody>
         </table>
       </div>
+      {/* Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        hasMore={hasMore}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
       {/* Tableau des bulletins supprimé */}
     </div>
   );
