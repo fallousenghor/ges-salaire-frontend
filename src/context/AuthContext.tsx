@@ -60,25 +60,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     // Indiquer que nous sommes en train de déconnecter
     setLoading(true);
-    
+
     // Publier l'événement de déconnexion avant de nettoyer le state
     window.dispatchEvent(new CustomEvent('auth:logout'));
-    
+
     // Nettoyer immédiatement le localStorage
     localStorage.clear();  // Nettoie tout le localStorage
-    
+
     // Réinitialiser le state de manière synchrone
     setUser(null);
     setToken(null);
-    
+
     // Forcer un petit délai pour permettre aux composants de se mettre à jour
     requestAnimationFrame(() => {
       setLoading(false);
     });
   };
 
+  const reload = () => {
+    const storedToken = localStorage.getItem("token");
+    const storedUser = localStorage.getItem("user");
+    if (storedToken && storedUser) {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUser));
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, token, login, logout, loading, reload }}>
       {children}
     </AuthContext.Provider>
   );

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login as loginApi } from '../api/loginApi';
 import { setAuth } from '../services/authService';
+import { useAuth } from './useAuth';
 
 function parseJwt(token: string) {
   try {
@@ -25,6 +26,7 @@ export function useLogin() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { reload } = useAuth();
 
   const login = async (email: string, motDePasse: string) => {
     setError(null);
@@ -54,16 +56,14 @@ export function useLogin() {
         roles: data.user?.roles
       });
 
+      // Reload AuthContext state
+      reload();
+
       // Détermine la route en fonction du rôle
       const targetRoute = payload.role.toUpperCase() === 'CAISSIER' ? '/paiements' : '/dashboard';
-      
+
       // Rediriger vers la route appropriée
       navigate(targetRoute, { replace: true });
-      
-      // Forcer le rafraîchissement après la redirection
-      setTimeout(() => {
-        window.location.reload();
-      }, 100);
 
       return {
         doitChangerMotDePasse: data.doitChangerMotDePasse === true,

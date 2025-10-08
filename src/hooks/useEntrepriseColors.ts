@@ -30,8 +30,8 @@ export const useEntrepriseColors = () => {
       return;
     }
 
-    if (user.role === 'ADMIN' && entreprise) {
-      // Couleurs de l'entreprise pour l'admin
+    if ((user.role === 'ADMIN' || user.role === 'CAISSIER') && entreprise) {
+      // Couleurs de l'entreprise pour l'admin et le caissier
       root.style.setProperty('--primary-color', entreprise.couleurPrimaire);
       root.style.setProperty('--secondary-color', entreprise.couleurSecondaire);
       root.style.setProperty('--primary-color-hover', adjustBrightness(entreprise.couleurPrimaire, -20));
